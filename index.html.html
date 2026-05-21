@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klean Kix — Book a Pickup</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --white: #f7f4f0;
+    --orange: #ff5c1a;
+    --orange-dim: rgba(255,92,26,0.12);
+    --grey: #1e1e1e;
+    --grey2: #2c2c2c;
+    --mid: #777;
+    --border: #2e2e2e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--black); color:var(--white); font-family:'Outfit',sans-serif; min-height:100vh; overflow-x:hidden; }
+
+  .hero { position:relative; padding:52px 24px 36px; text-align:center; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:600px; height:600px; background:radial-gradient(circle,rgba(255,92,26,0.15) 0%,transparent 65%); pointer-events:none; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:clamp(64px,18vw,110px); letter-spacing:5px; line-height:0.88; }
+  .logo span { color:var(--orange); }
+  .tagline { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--mid); margin-top:10px; font-weight:500; }
+  .hero-line { width:36px; height:2px; background:var(--orange); margin:18px auto; }
+  .hero-sub { font-size:14px; color:#888; line-height:1.65; max-width:300px; margin:0 auto; }
+
+  .schedule { padding:4px 20px 0; display:flex; flex-direction:column; gap:8px; }
+  .pill { background:var(--grey); border-radius:10px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-left:3px solid var(--orange); opacity:0; animation:fadeSlide 0.5s ease forwards; }
+  .pill:nth-child(1){animation-delay:.05s}.pill:nth-child(2){animation-delay:.12s}.pill:nth-child(3){animation-delay:.19s}.pill:nth-child(4){animation-delay:.26s}
+  @keyframes fadeSlide { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+  .pill-day { font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:1px; color:var(--orange); white-space:nowrap; }
+  .pill-areas { font-size:11px; color:#999; text-align:right; line-height:1.5; max-width:210px; }
+
+  .form-body { padding:10px 20px 64px; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--orange); margin:30px 0 14px; display:flex; align-items:center; gap:10px; }
+  .sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .field { margin-bottom:14px; }
+  label.lbl { display:block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#777; margin-bottom:7px; font-weight:600; }
+  input[type=text],input[type=tel],input[type=url],input[type=number],select,textarea { width:100%; background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; color:var(--white); font-family:'Outfit',sans-serif; font-size:15px; outline:none; transition:border-color .2s,background .2s; -webkit-appearance:none; }
+  input:focus,select:focus,textarea:focus { border-color:var(--orange); background:#252525; }
+  input::placeholder,textarea::placeholder { color:#444; }
+  select option { background:#1e1e1e; }
+  textarea { resize:vertical; min-height:82px; }
+
+  /* ── SHOE TYPE TABLE ── */
+  .shoe-section { margin-bottom:8px; }
+  .shoe-cat-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#666; font-weight:600; padding:10px 0 6px; border-bottom:1px solid var(--border); margin-bottom:8px; }
+
+  .shoe-row { display:flex; align-items:center; background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:8px; gap:10px; transition:border-color .2s, background .2s; }
+  .shoe-row.active { border-color:var(--orange); background:var(--orange-dim); }
+
+  .shoe-check { width:20px; height:20px; min-width:20px; border-radius:6px; border:2px solid #555; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; flex-shrink:0; }
+  .shoe-check.checked { background:var(--orange); border-color:var(--orange); }
+  .shoe-check.checked::after { content:'✓'; color:white; font-size:12px; font-weight:700; }
+
+  .shoe-info { flex:1; cursor:pointer; }
+  .shoe-info-name { font-size:13px; font-weight:600; }
+  .shoe-info-price { font-size:12px; color:var(--orange); font-weight:700; }
+
+  .shoe-qty { display:none; align-items:center; gap:0; background:var(--black); border-radius:8px; overflow:hidden; border:1px solid var(--border); }
+  .shoe-row.active .shoe-qty { display:flex; }
+  .qty-btn { background:var(--grey2); border:none; color:var(--white); font-size:18px; width:34px; height:34px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s; }
+  .qty-btn:active { background:var(--orange); }
+  .qty-num { width:32px; text-align:center; font-size:14px; font-weight:700; color:var(--white); background:transparent; border:none; outline:none; font-family:'Outfit',sans-serif; -webkit-appearance:none; padding:0; }
+  .qty-num::-webkit-outer-spin-button,.qty-num::-webkit-inner-spin-button { -webkit-appearance:none; }
+
+  .shoe-subtotal { font-size:12px; font-weight:700; color:var(--orange); min-width:38px; text-align:right; display:none; }
+  .shoe-row.active .shoe-subtotal { display:block; }
+
+  /* ── ADDONS ── */
+  .addon-list { display:flex; flex-direction:column; gap:8px; }
+  .addon-card { background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; cursor:pointer; transition:all .2s; display:flex; justify-content:space-between; align-items:center; position:relative; }
+  .addon-card input { position:absolute; opacity:0; width:0; height:0; }
+  .addon-card:has(input:checked) { border-color:var(--orange); background:var(--orange-dim); }
+  .addon-info { display:flex; flex-direction:column; gap:2px; }
+  .addon-name { font-size:14px; font-weight:600; }
+  .addon-desc { font-size:11px; color:#777; }
+  .addon-price { font-size:14px; font-weight:700; color:var(--orange); }
+
+  /* ── OPTIONS ── */
+  .opt-list { display:flex; flex-direction:column; gap:8px; }
+  .opt-card { background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:12px; position:relative; }
+  .opt-card input { position:absolute; opacity:0; width:0; height:0; }
+  .opt-card:has(input:checked) { border-color:var(--orange); background:var(--orange-dim); }
+  .opt-dot { width:18px; height:18px; border-radius:50%; border:2px solid #555; flex-shrink:0; transition:all .2s; display:flex; align-items:center; justify-content:center; }
+  .opt-card:has(input:checked) .opt-dot { border-color:var(--orange); background:var(--orange); }
+  .opt-card:has(input:checked) .opt-dot::after { content:''; width:6px; height:6px; border-radius:50%; background:white; }
+  .opt-body { flex:1; }
+  .opt-title { font-size:14px; font-weight:600; }
+  .opt-sub { font-size:11px; color:#777; margin-top:2px; }
+  .opt-badge { background:var(--orange); color:white; font-size:10px; font-weight:700; letter-spacing:1px; padding:3px 8px; border-radius:20px; text-transform:uppercase; }
+
+  /* ── PRICE BOX ── */
+  .price-box { background:var(--grey); border:1.5px solid var(--border); border-radius:14px; padding:18px; margin-top:24px; }
+  .price-box-title { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:var(--orange); margin-bottom:14px; }
+  .price-lines { display:flex; flex-direction:column; gap:0; }
+  .price-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .price-row .plabel { color:#888; }
+  .price-row .pval { font-weight:600; }
+  .price-total { display:flex; justify-content:space-between; align-items:center; padding-top:14px; margin-top:6px; border-top:1.5px solid var(--orange); }
+  .price-total .tlabel { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; }
+  .price-total .tval { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:1px; }
+  .express-note { font-size:11px; color:var(--orange); margin-top:8px; text-align:center; opacity:0; transition:opacity .3s; }
+  .express-note.show { opacity:1; }
+
+  /* ── MISC ── */
+  .hint { background:rgba(255,92,26,.07); border:1px solid rgba(255,92,26,.2); border-radius:10px; padding:11px 14px; font-size:12px; color:#aaa; line-height:1.6; margin-top:8px; }
+  .hint strong { color:var(--orange); }
+  .day-box { display:none; background:#141414; border:1px solid var(--border); border-radius:10px; padding:13px 16px; margin-bottom:14px; }
+  .day-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
+  .day-row .dlabel { color:#777; }
+  .day-row .dval { font-weight:600; }
+  .day-row .dval.orange { color:var(--orange); }
+  .err { color:#ff6b6b; font-size:12px; margin-top:5px; display:none; }
+  .has-error .err { display:block; }
+  .has-error input,.has-error select { border-color:#ff6b6b!important; }
+  .shoe-err { color:#ff6b6b; font-size:12px; margin-top:5px; display:none; }
+  .shoe-err.show { display:block; }
+
+  .submit-btn { width:100%; background:var(--orange); color:white; border:none; border-radius:14px; padding:18px; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; cursor:pointer; margin-top:28px; transition:background .2s,transform .1s; }
+  .submit-btn:active { transform:scale(.98); background:#cc4200; }
+
+  .success { display:none; padding:60px 24px 80px; text-align:center; animation:upFade .5s ease; }
+  @keyframes upFade { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .success-icon { font-size:60px; margin-bottom:20px; }
+  .success-title { font-family:'Bebas Neue',sans-serif; font-size:46px; letter-spacing:3px; color:var(--orange); margin-bottom:10px; }
+  .success-msg { font-size:15px; color:#999; line-height:1.7; max-width:300px; margin:0 auto 28px; }
+  .summary-card { background:var(--grey); border-radius:14px; padding:20px; text-align:left; max-width:360px; margin:0 auto; }
+  .s-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .s-row:last-child { border-bottom:none; }
+  .s-row span:first-child { color:#777; }
+  .s-row span:last-child { font-weight:600; text-align:right; max-width:65%; }
+  .footer { text-align:center; padding:16px 24px 36px; font-size:11px; color:#333; line-height:1.7; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo">KLEAN<span>KIX</span></div>
+  <div class="tagline">Fresh Kicks, Every Step</div>
+  <div class="hero-line"></div>
+  <p class="hero-sub">Book your shoe pickup. We collect, clean &amp; deliver back to your door.</p>
+</div>
+
+<div class="schedule">
+  <div class="pill"><div class="pill-day">Tue → Thu</div><div class="pill-areas">Makeni · Chilanga · Lilayi</div></div>
+  <div class="pill"><div class="pill-day">Wed → Fri</div><div class="pill-areas">Town · Northmead · Roma · Olympia · Jesmondine</div></div>
+  <div class="pill"><div class="pill-day">Sat → Mon</div><div class="pill-areas">Munali · Meanwood · Chelston · Avondale · Vorna Valley</div></div>
+  <div class="pill"><div class="pill-day">Sat → Mon</div><div class="pill-areas">Kabulonga · Woodlands · Leopards Hill · Chalala · Chilenje</div></div>
+</div>
+
+<!-- Netlify form detection -->
+<form name="kleankix-bookings" netlify netlify-honeypot="bot-field" hidden>
+  <input name="name"/><input name="phone"/><input name="area"/><input name="pickup_day"/>
+  <input name="delivery_day"/><input name="shoes"/><input name="addons"/>
+  <input name="delivery_type"/><input name="payment"/><input name="address"/>
+  <input name="total"/><input name="notes"/>
+</form>
+
+<div class="form-body" id="formBody">
+
+  <div class="sec-title">Your Details</div>
+  <div class="field" id="f-name">
+    <label class="lbl">Full Name</label>
+    <input type="text" id="name" placeholder="e.g. Chanda Mwale">
+    <div class="err">Please enter your name</div>
+  </div>
+  <div class="field" id="f-phone">
+    <label class="lbl">WhatsApp Number</label>
+    <input type="tel" id="phone" placeholder="e.g. 0971 234 567">
+    <div class="err">Please enter your phone number</div>
+  </div>
+
+  <div class="sec-title">Your Location</div>
+  <div class="field" id="f-area">
+    <label class="lbl">Select Your Area</label>
+    <select id="area" onchange="onAreaChange()">
+      <option value="">— Choose your area —</option>
+      <optgroup label="Route 1 — Pickup Tuesday · Delivery Thursday">
+        <option value="Makeni|Route 1|Tuesday|Thursday|200">Makeni</option>
+        <option value="Chilanga|Route 1|Tuesday|Thursday|200">Chilanga</option>
+        <option value="Lilayi|Route 1|Tuesday|Thursday|200">Lilayi</option>
+      </optgroup>
+      <optgroup label="Route 2 — Pickup Wednesday · Delivery Friday">
+        <option value="Town/CBD|Route 2|Wednesday|Friday|200">Town / CBD</option>
+        <option value="Lusaka West|Route 2|Wednesday|Friday|200">Lusaka West</option>
+        <option value="Villa Elizabetha|Route 2|Wednesday|Friday|200">Villa Elizabetha</option>
+        <option value="Northmead|Route 2|Wednesday|Friday|200">Northmead</option>
+        <option value="Thornpark|Route 2|Wednesday|Friday|200">Thornpark</option>
+        <option value="Roma|Route 2|Wednesday|Friday|200">Roma</option>
+        <option value="Olympia|Route 2|Wednesday|Friday|200">Olympia</option>
+        <option value="Jesmondine|Route 2|Wednesday|Friday|200">Jesmondine</option>
+      </optgroup>
+      <optgroup label="Route 3 — Pickup Saturday · Delivery Monday">
+        <option value="Munali|Route 3|Saturday|Monday|200">Munali</option>
+        <option value="Meanwood Mtumbi|Route 3|Saturday|Monday|200">Meanwood Mtumbi</option>
+        <option value="Meanwood Ndeke|Route 3|Saturday|Monday|200">Meanwood Ndeke</option>
+        <option value="Meanwood Airport|Route 3|Saturday|Monday|200">Meanwood Airport</option>
+        <option value="Chelston|Route 3|Saturday|Monday|200">Chelston</option>
+        <option value="Avondale|Route 3|Saturday|Monday|200">Avondale</option>
+        <option value="Salama Park|Route 3|Saturday|Monday|200">Salama Park</option>
+        <option value="Vorna Valley|Route 3|Saturday|Monday|200">Vorna Valley</option>
+      </optgroup>
+      <optgroup label="Route 4 — Pickup Saturday · Delivery Monday">
+        <option value="Kabulonga|Route 4|Saturday|Monday|100">Kabulonga</option>
+        <option value="Woodlands|Route 4|Saturday|Monday|100">Woodlands</option>
+        <option value="Leopards Hill Rd|Route 4|Saturday|Monday|100">Leopards Hill Road</option>
+        <option value="New Kasama|Route 4|Saturday|Monday|100">New Kasama</option>
+        <option value="Chifwema|Route 4|Saturday|Monday|100">Chifwema</option>
+        <option value="State Lodge Area|Route 4|Saturday|Monday|100">State Lodge Area</option>
+        <option value="Chalala|Route 4|Saturday|Monday|100">Chalala</option>
+        <option value="Chilenje|Route 4|Saturday|Monday|100">Chilenje</option>
+      </optgroup>
+    </select>
+    <div class="err">Please select your area</div>
+  </div>
+
+  <div class="day-box" id="dayBox">
+    <div class="day-row"><span class="dlabel">📦 Pickup Day</span><span class="dval orange" id="dPickup"></span></div>
+    <div class="day-row"><span class="dlabel">🚗 Delivery Day</span><span class="dval" id="dDelivery"></span></div>
+    <div class="day-row"><span class="dlabel">🚚 Delivery Fee</span><span class="dval" id="dFee"></span></div>
+  </div>
+
+  <div class="field" id="f-address">
+    <label class="lbl">Street Address / Nearest Landmark</label>
+    <input type="text" id="address" placeholder="e.g. Near Shoprite Woodlands, House 14 Kafue Rd">
+    <div class="err">Please enter your address</div>
+  </div>
+  <div class="field">
+    <label class="lbl">Google Maps Link <span style="color:#555;text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+    <input type="url" id="mapslink" placeholder="Paste your location link here">
+    <div class="hint"><strong>How:</strong> Open Google Maps → long press your spot → tap Share → Copy link → paste above</div>
+  </div>
+
+  <!-- SHOES -->
+  <div class="sec-title">Your Shoes</div>
+  <label class="lbl">Select shoe types &amp; quantity for each</label>
+  <div class="shoe-err" id="shoeErr">Please select at least one shoe type</div>
+
+  <div id="shoeList"></div>
+
+  <!-- ADDONS -->
+  <div class="sec-title">Add-Ons</div>
+  <div class="addon-list">
+    <label class="addon-card"><input type="checkbox" name="addon" value="Deep Stain Removal|70" onchange="calcPrice()">
+      <div class="addon-info"><span class="addon-name">Deep Stain Removal</span><span class="addon-desc">For tough stains &amp; heavy soiling</span></div>
+      <span class="addon-price">+K70</span>
+    </label>
+    <label class="addon-card"><input type="checkbox" name="addon" value="Odour Treatment|65" onchange="calcPrice()">
+      <div class="addon-info"><span class="addon-name">Odour Treatment</span><span class="addon-desc">Deodorising &amp; freshening treatment</span></div>
+      <span class="addon-price">+K65</span>
+    </label>
+  </div>
+
+  <!-- DELIVERY -->
+  <div class="sec-title">Delivery Type</div>
+  <div class="field" id="f-delivery">
+    <div class="opt-list">
+      <label class="opt-card"><input type="radio" name="delivery" value="standard" onchange="calcPrice()">
+        <div class="opt-dot"></div>
+        <div class="opt-body"><div class="opt-title">Standard — 48 Hours</div><div class="opt-sub">Pickup &amp; delivery on your scheduled route days</div></div>
+      </label>
+      <label class="opt-card"><input type="radio" name="delivery" value="express" onchange="calcPrice()">
+        <div class="opt-dot"></div>
+        <div class="opt-body"><div class="opt-title">Same-Day Express</div><div class="opt-sub">Shoe fee doubled + K300 transport. Book before 9am</div></div>
+        <span class="opt-badge">Express</span>
+      </label>
+    </div>
+    <div class="err">Please select delivery type</div>
+  </div>
+
+  <!-- PRICE BOX -->
+  <div class="price-box" id="priceBox" style="display:none">
+    <div class="price-box-title">ESTIMATED TOTAL</div>
+    <div class="price-lines" id="priceLines"></div>
+    <div class="price-total"><span class="tlabel">TOTAL</span><span class="tval" id="totalAmt">K0</span></div>
+    <div class="express-note" id="expressNote">⚡ Shoe fees doubled + K300 transport for express</div>
+  </div>
+
+  <!-- PAYMENT -->
+  <div class="sec-title">Payment</div>
+  <div class="field" id="f-payment">
+    <div class="opt-list">
+      <label class="opt-card"><input type="radio" name="payment" value="Airtel Money"><div class="opt-dot"></div><div class="opt-body"><div class="opt-title">Airtel Money</div></div></label>
+      <label class="opt-card"><input type="radio" name="payment" value="MTN Money"><div class="opt-dot"></div><div class="opt-body"><div class="opt-title">MTN Money</div></div></label>
+      <label class="opt-card"><input type="radio" name="payment" value="Cash on Pickup"><div class="opt-dot"></div><div class="opt-body"><div class="opt-title">Cash on Pickup</div></div></label>
+    </div>
+    <div class="err">Please select payment method</div>
+  </div>
+
+  <div class="sec-title">Anything Else?</div>
+  <div class="field">
+    <label class="lbl">Special Instructions <span style="color:#555;text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+    <textarea id="notes" placeholder="e.g. Gate colour, fragile material, specific requests..."></textarea>
+  </div>
+  <div class="field">
+    <label class="lbl">How did you hear about us?</label>
+    <select id="source">
+      <option value="">— Select —</option>
+      <option>Facebook</option><option>TikTok</option><option>Friend / Referral</option><option>WhatsApp</option><option>Other</option>
+    </select>
+  </div>
+
+  <button class="submit-btn" type="button" onclick="submitForm()">BOOK MY PICKUP 👟</button>
+</div>
+
+<div class="success" id="successScreen">
+  <div class="success-icon">👟✨</div>
+  <div class="success-title">You're Booked!</div>
+  <p class="success-msg">We'll confirm your pickup via WhatsApp within 2 hours. Get your kicks ready!</p>
+  <div class="summary-card" id="summaryCard"></div>
+</div>
+
+<div class="footer">
+  Woodlands, Harry Mwaanga Nkumbula Rd · Next to Desire Farms/Mbuzi<br>
+  Also at Metro Laundry outlets across Lusaka · "Fresh Kicks, Every Step"
+</div>
+
+<script>
+// ── SHOE DATA ────────────────────────────────────────────────────
+const SHOES = [
+  { cat:'Men', items:[
+    {name:'Sneakers', price:60},
+    {name:'Canvas Shoes', price:70},
+    {name:'Formal Shoes', price:80},
+    {name:'Loafers', price:75},
+    {name:'Suede', price:100},
+    {name:'Normal Boots', price:100},
+    {name:'Timbaland Boots', price:150},
+    {name:'Slides', price:50},
+    {name:'Sandals', price:50},
+  ]},
+  { cat:'Ladies', items:[
+    {name:'Pumps', price:50},
+    {name:'High Heels', price:55},
+    {name:'Long Boots', price:115},
+  ]},
+  { cat:'Kids', items:[
+    {name:'Leather Shoes', price:60},
+    {name:'Suede', price:80},
+    {name:'Sneakers', price:45},
+    {name:'Boots', price:80},
+  ]},
+  { cat:'Sports', items:[
+    {name:'Soccer Boots', price:65},
+    {name:'Trainers', price:70},
+  ]},
+];
+
+// ── BUILD SHOE LIST ──────────────────────────────────────────────
+function buildShoeList() {
+  const container = document.getElementById('shoeList');
+  SHOES.forEach(section => {
+    const sec = document.createElement('div');
+    sec.className = 'shoe-section';
+    sec.innerHTML = `<div class="shoe-cat-label">${section.cat}</div>`;
+    section.items.forEach(item => {
+      const key = section.cat + '_' + item.name.replace(/\s/g,'_');
+      const row = document.createElement('div');
+      row.className = 'shoe-row';
+      row.id = 'row_' + key;
+      row.innerHTML = `
+        <div class="shoe-check" id="chk_${key}" onclick="toggleShoe('${key}')"></div>
+        <div class="shoe-info" onclick="toggleShoe('${key}')">
+          <div class="shoe-info-name">${item.name}</div>
+          <div class="shoe-info-price">K${item.price} each</div>
+        </div>
+        <div class="shoe-qty">
+          <button class="qty-btn" type="button" onclick="changeQty('${key}',-1)">−</button>
+          <input class="qty-num" type="number" id="qty_${key}" value="1" min="1" max="99"
+            oninput="updateSubtotal('${key}',${item.price})">
+          <button class="qty-btn" type="button" onclick="changeQty('${key}',1)">+</button>
+        </div>
+        <div class="shoe-subtotal" id="sub_${key}">K${item.price}</div>
+      `;
+      row.dataset.price = item.price;
+      row.dataset.key = key;
+      sec.appendChild(row);
+    });
+    container.appendChild(sec);
+  });
+}
+
+function toggleShoe(key) {
+  const row = document.getElementById('row_' + key);
+  const chk = document.getElementById('chk_' + key);
+  const active = row.classList.toggle('active');
+  chk.classList.toggle('checked', active);
+  document.getElementById('shoeErr').classList.remove('show');
+  calcPrice();
+}
+
+function changeQty(key, delta) {
+  const inp = document.getElementById('qty_' + key);
+  const price = parseInt(document.getElementById('row_' + key).dataset.price);
+  inp.value = Math.max(1, Math.min(99, (parseInt(inp.value)||1) + delta));
+  updateSubtotal(key, price);
+}
+
+function updateSubtotal(key, price) {
+  const qty = Math.max(1, parseInt(document.getElementById('qty_' + key).value)||1);
+  document.getElementById('sub_' + key).textContent = 'K' + (price * qty);
+  calcPrice();
+}
+
+// ── AREA CHANGE ──────────────────────────────────────────────────
+function onAreaChange() {
+  const v = document.getElementById('area').value;
+  const box = document.getElementById('dayBox');
+  if (!v) { box.style.display='none'; return; }
+  const p = v.split('|');
+  document.getElementById('dPickup').textContent = p[2];
+  document.getElementById('dDelivery').textContent = p[3];
+  document.getElementById('dFee').textContent = 'K'+p[4];
+  box.style.display = 'block';
+  calcPrice();
+}
+
+// ── PRICE CALC ───────────────────────────────────────────────────
+function calcPrice() {
+  const delivEl = document.querySelector('input[name="delivery"]:checked');
+  const areaVal = document.getElementById('area').value;
+  const box = document.getElementById('priceBox');
+
+  // collect selected shoes
+  const selectedShoes = [];
+  document.querySelectorAll('.shoe-row.active').forEach(row => {
+    const key = row.dataset.key;
+    const price = parseInt(row.dataset.price);
+    const qty = Math.max(1, parseInt(document.getElementById('qty_' + key).value)||1);
+    const name = row.querySelector('.shoe-info-name').textContent;
+    selectedShoes.push({name, price, qty});
+  });
+
+  if (selectedShoes.length === 0 || !delivEl || !areaVal) { box.style.display='none'; return; }
+
+  const isExpress = delivEl.value === 'express';
+  const transport = parseInt(areaVal.split('|')[4]);
+  const addons = [...document.querySelectorAll('input[name="addon"]:checked')];
+  const addonTotal = addons.reduce((s,a) => s + parseInt(a.value.split('|')[1]), 0);
+
+  let shoeTotal = selectedShoes.reduce((s,sh) => s + sh.price * sh.qty, 0);
+  if (isExpress) shoeTotal *= 2;
+
+  const total = shoeTotal + addonTotal + transport + (isExpress ? 300 : 0);
+
+  // build lines
+  const lines = document.getElementById('priceLines');
+  lines.innerHTML = '';
+
+  selectedShoes.forEach(sh => {
+    let amt = sh.price * sh.qty;
+    if (isExpress) amt *= 2;
+    const label = isExpress ? `${sh.name} ×${sh.qty} (×2)` : `${sh.name} ×${sh.qty}`;
+    lines.innerHTML += `<div class="price-row"><span class="plabel">${label}</span><span class="pval">K${amt}</span></div>`;
+  });
+
+  if (addonTotal > 0) {
+    lines.innerHTML += `<div class="price-row"><span class="plabel">Add-ons</span><span class="pval">K${addonTotal}</span></div>`;
+  }
+  lines.innerHTML += `<div class="price-row"><span class="plabel">Delivery fee</span><span class="pval">K${transport}</span></div>`;
+  if (isExpress) {
+    lines.innerHTML += `<div class="price-row"><span class="plabel">Express surcharge</span><span class="pval">K300</span></div>`;
+  }
+
+  document.getElementById('totalAmt').textContent = 'K' + total;
+  document.getElementById('expressNote').classList.toggle('show', isExpress);
+  box.style.display = 'block';
+}
+
+// ── VALIDATE ─────────────────────────────────────────────────────
+function validate(id, cond) {
+  const el = document.getElementById('f-'+id);
+  if (el) el.classList.toggle('has-error', !cond);
+  return cond;
+}
+
+// ── SUBMIT ───────────────────────────────────────────────────────
+function submitForm() {
+  let ok = true;
+  ok = validate('name', document.getElementById('name').value.trim() !== '') && ok;
+  ok = validate('phone', document.getElementById('phone').value.trim() !== '') && ok;
+  ok = validate('area', document.getElementById('area').value !== '') && ok;
+  ok = validate('address', document.getElementById('address').value.trim() !== '') && ok;
+  ok = validate('delivery', !!document.querySelector('input[name="delivery"]:checked')) && ok;
+  ok = validate('payment', !!document.querySelector('input[name="payment"]:checked')) && ok;
+
+  const selectedShoes = [...document.querySelectorAll('.shoe-row.active')];
+  if (selectedShoes.length === 0) {
+    document.getElementById('shoeErr').classList.add('show');
+    ok = false;
+  }
+
+  if (!ok) { document.querySelector('.has-error, .shoe-err.show')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+  const p = document.getElementById('area').value.split('|');
+  const delivEl = document.querySelector('input[name="delivery"]:checked');
+  const isExpress = delivEl.value === 'express';
+  const transport = parseInt(p[4]);
+
+  const shoeSummary = selectedShoes.map(row => {
+    const key = row.dataset.key;
+    const qty = parseInt(document.getElementById('qty_' + key).value)||1;
+    return `${row.querySelector('.shoe-info-name').textContent} ×${qty}`;
+  }).join(', ');
+
+  const shoeTotal0 = selectedShoes.reduce((s, row) => {
+    const key = row.dataset.key;
+    const qty = parseInt(document.getElementById('qty_' + key).value)||1;
+    return s + parseInt(row.dataset.price) * qty;
+  }, 0);
+  let shoeTotal = isExpress ? shoeTotal0 * 2 : shoeTotal0;
+
+  const addons = [...document.querySelectorAll('input[name="addon"]:checked')];
+  const addonTotal = addons.reduce((s,a) => s + parseInt(a.value.split('|')[1]), 0);
+  const total = shoeTotal + addonTotal + transport + (isExpress ? 300 : 0);
+
+  const rows = [
+    ['Name', document.getElementById('name').value],
+    ['Phone', document.getElementById('phone').value],
+    ['Area', p[0]], ['Pickup Day', p[2]], ['Delivery Day', p[3]],
+    ['Shoes', shoeSummary],
+    ['Add-ons', addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None'],
+    ['Delivery', isExpress ? 'Same-Day Express' : 'Standard 48hrs'],
+    ['Payment', document.querySelector('input[name="payment"]:checked').value],
+    ['TOTAL', 'K'+total],
+  ];
+  document.getElementById('summaryCard').innerHTML = rows.map(([l,v])=>`<div class="s-row"><span>${l}</span><span>${v}</span></div>`).join('');
+
+  // ── 1. SEND TO FORMINIT (Google Sheets record) ──────────────────
+  const formData = {
+    name: document.getElementById('name').value,
+    phone: document.getElementById('phone').value,
+    area: p[0],
+    route: p[1],
+    pickup_day: p[2],
+    delivery_day: p[3],
+    shoes: shoeSummary,
+    addons: addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None',
+    delivery_type: isExpress ? 'Same-Day Express' : 'Standard 48hrs',
+    payment: document.querySelector('input[name="payment"]:checked').value,
+    address: document.getElementById('address').value,
+    maps_link: document.getElementById('mapslink').value || 'Not provided',
+    notes: document.getElementById('notes').value || 'None',
+    source: document.getElementById('source').value || 'Not specified',
+    total: 'K' + total,
+  };
+
+  fetch('https://app.forminit.com/forms/b3j9x62t7ro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(formData)
+  }).catch(err => console.log('Forminit error:', err));
+
+  // ── 1b. SEND TO NETLIFY FORMS (email notification) ───────────────
+  const netlifyData = new URLSearchParams();
+  netlifyData.append('form-name', 'kleankix-bookings');
+  Object.entries(formData).forEach(([k,v]) => netlifyData.append(k, v));
+  fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: netlifyData.toString()})
+    .catch(err => console.log('Netlify error:', err));
+
+  // ── 2. WHATSAPP NOTIFICATION ─────────────────────────────────────
+  const waMsg = encodeURIComponent(
+    `🧹 *NEW KLEAN KIX BOOKING*\n\n` +
+    `👤 *Name:* ${formData.name}\n` +
+    `📱 *Phone:* ${formData.phone}\n` +
+    `📍 *Area:* ${formData.area}\n` +
+    `📦 *Pickup:* ${formData.pickup_day}\n` +
+    `🚗 *Delivery:* ${formData.delivery_day}\n` +
+    `👟 *Shoes:* ${formData.shoes}\n` +
+    `➕ *Add-ons:* ${formData.addons}\n` +
+    `⚡ *Type:* ${formData.delivery_type}\n` +
+    `💳 *Payment:* ${formData.payment}\n` +
+    `🏠 *Address:* ${formData.address}\n` +
+    `💰 *TOTAL: K${total}*`
+  );
+  setTimeout(() => {
+    window.open(`https://wa.me/260765121547?text=${waMsg}`, '_blank');
+  }, 800);
+
+  document.getElementById('formBody').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildShoeList();
+</script>
+</body>
+</html>

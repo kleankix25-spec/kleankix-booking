@@ -45,32 +45,25 @@
   select option { background:#1e1e1e; }
   textarea { resize:vertical; min-height:82px; }
 
-  /* ── SHOE TYPE TABLE ── */
   .shoe-section { margin-bottom:8px; }
   .shoe-cat-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#666; font-weight:600; padding:10px 0 6px; border-bottom:1px solid var(--border); margin-bottom:8px; }
-
   .shoe-row { display:flex; align-items:center; background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:8px; gap:10px; transition:border-color .2s, background .2s; }
   .shoe-row.active { border-color:var(--orange); background:var(--orange-dim); }
-
   .shoe-check { width:20px; height:20px; min-width:20px; border-radius:6px; border:2px solid #555; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; flex-shrink:0; }
   .shoe-check.checked { background:var(--orange); border-color:var(--orange); }
   .shoe-check.checked::after { content:'✓'; color:white; font-size:12px; font-weight:700; }
-
   .shoe-info { flex:1; cursor:pointer; }
   .shoe-info-name { font-size:13px; font-weight:600; }
   .shoe-info-price { font-size:12px; color:var(--orange); font-weight:700; }
-
   .shoe-qty { display:none; align-items:center; gap:0; background:var(--black); border-radius:8px; overflow:hidden; border:1px solid var(--border); }
   .shoe-row.active .shoe-qty { display:flex; }
   .qty-btn { background:var(--grey2); border:none; color:var(--white); font-size:18px; width:34px; height:34px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s; }
   .qty-btn:active { background:var(--orange); }
   .qty-num { width:32px; text-align:center; font-size:14px; font-weight:700; color:var(--white); background:transparent; border:none; outline:none; font-family:'Outfit',sans-serif; -webkit-appearance:none; padding:0; }
   .qty-num::-webkit-outer-spin-button,.qty-num::-webkit-inner-spin-button { -webkit-appearance:none; }
-
   .shoe-subtotal { font-size:12px; font-weight:700; color:var(--orange); min-width:38px; text-align:right; display:none; }
   .shoe-row.active .shoe-subtotal { display:block; }
 
-  /* ── ADDONS ── */
   .addon-list { display:flex; flex-direction:column; gap:8px; }
   .addon-card { background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; cursor:pointer; transition:all .2s; display:flex; justify-content:space-between; align-items:center; position:relative; }
   .addon-card input { position:absolute; opacity:0; width:0; height:0; }
@@ -80,7 +73,6 @@
   .addon-desc { font-size:11px; color:#777; }
   .addon-price { font-size:14px; font-weight:700; color:var(--orange); }
 
-  /* ── OPTIONS ── */
   .opt-list { display:flex; flex-direction:column; gap:8px; }
   .opt-card { background:var(--grey); border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:12px; position:relative; }
   .opt-card input { position:absolute; opacity:0; width:0; height:0; }
@@ -93,7 +85,6 @@
   .opt-sub { font-size:11px; color:#777; margin-top:2px; }
   .opt-badge { background:var(--orange); color:white; font-size:10px; font-weight:700; letter-spacing:1px; padding:3px 8px; border-radius:20px; text-transform:uppercase; }
 
-  /* ── PRICE BOX ── */
   .price-box { background:var(--grey); border:1.5px solid var(--border); border-radius:14px; padding:18px; margin-top:24px; }
   .price-box-title { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:var(--orange); margin-bottom:14px; }
   .price-lines { display:flex; flex-direction:column; gap:0; }
@@ -106,7 +97,6 @@
   .express-note { font-size:11px; color:var(--orange); margin-top:8px; text-align:center; opacity:0; transition:opacity .3s; }
   .express-note.show { opacity:1; }
 
-  /* ── MISC ── */
   .hint { background:rgba(255,92,26,.07); border:1px solid rgba(255,92,26,.2); border-radius:10px; padding:11px 14px; font-size:12px; color:#aaa; line-height:1.6; margin-top:8px; }
   .hint strong { color:var(--orange); }
   .day-box { display:none; background:#141414; border:1px solid var(--border); border-radius:10px; padding:13px 16px; margin-bottom:14px; }
@@ -120,8 +110,13 @@
   .shoe-err { color:#ff6b6b; font-size:12px; margin-top:5px; display:none; }
   .shoe-err.show { display:block; }
 
-  .submit-btn { width:100%; background:var(--orange); color:white; border:none; border-radius:14px; padding:18px; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; cursor:pointer; margin-top:28px; transition:background .2s,transform .1s; }
+  .submit-btn { width:100%; background:var(--orange); color:white; border:none; border-radius:14px; padding:18px; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; cursor:pointer; margin-top:28px; transition:background .2s,transform .1s; position:relative; }
   .submit-btn:active { transform:scale(.98); background:#cc4200; }
+  .submit-btn:disabled { background:#555; cursor:not-allowed; }
+  .submit-btn .btn-spinner { display:none; width:20px; height:20px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin .7s linear infinite; margin:0 auto; }
+  .submit-btn.loading .btn-text { display:none; }
+  .submit-btn.loading .btn-spinner { display:block; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
   .success { display:none; padding:60px 24px 80px; text-align:center; animation:upFade .5s ease; }
   @keyframes upFade { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
@@ -133,6 +128,16 @@
   .s-row:last-child { border-bottom:none; }
   .s-row span:first-child { color:#777; }
   .s-row span:last-child { font-weight:600; text-align:right; max-width:65%; }
+
+  /* ── GOOGLE SHEETS BADGE ── */
+  .sheets-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(52,168,83,0.12); border:1px solid rgba(52,168,83,0.3); border-radius:20px; padding:5px 12px; font-size:11px; color:#34a853; font-weight:600; letter-spacing:0.5px; margin-top:12px; }
+  .sheets-badge svg { width:14px; height:14px; flex-shrink:0; }
+
+  /* ── SETUP BANNER ── */
+  .setup-banner { background:#141414; border:1px dashed rgba(255,92,26,0.4); border-radius:12px; padding:14px 16px; margin:16px 20px 0; font-size:12px; color:#888; line-height:1.7; }
+  .setup-banner strong { color:var(--orange); display:block; margin-bottom:4px; font-size:13px; }
+  .setup-banner code { background:#2a2a2a; padding:2px 6px; border-radius:4px; font-size:11px; color:#ccc; word-break:break-all; }
+
   .footer { text-align:center; padding:16px 24px 36px; font-size:11px; color:#333; line-height:1.7; }
 </style>
 </head>
@@ -143,6 +148,21 @@
   <div class="tagline">Fresh Kicks, Every Step</div>
   <div class="hero-line"></div>
   <p class="hero-sub">Book your shoe pickup. We collect, clean &amp; deliver back to your door.</p>
+  <div class="sheets-badge">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="#34a853" opacity=".3"/><path d="M14 2v6h6" fill="none" stroke="#34a853" stroke-width="1.5"/><path d="M8 13h8M8 17h5" stroke="#34a853" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Bookings saved to Google Sheets
+  </div>
+</div>
+
+<!-- ── SETUP INSTRUCTIONS (remove once your Script URL is pasted in) ── -->
+<div class="setup-banner" id="setupBanner">
+  <strong>⚙️ One-time Google Sheets Setup Required</strong>
+  1. Open your <strong>Klean Kix Booking Log</strong> Google Sheet<br>
+  2. Click <strong>Extensions → Apps Script</strong><br>
+  3. Paste the Apps Script code (see README), click <strong>Deploy → New deployment → Web App</strong><br>
+  4. Set access to <em>"Anyone"</em>, copy the Web App URL<br>
+  5. In this file, replace <code>YOUR_GOOGLE_SCRIPT_URL_HERE</code> with your URL<br>
+  6. Delete this banner once done ✅
 </div>
 
 <div class="schedule">
@@ -151,14 +171,6 @@
   <div class="pill"><div class="pill-day">Sat → Mon</div><div class="pill-areas">Munali · Meanwood · Chelston · Avondale · Vorna Valley</div></div>
   <div class="pill"><div class="pill-day">Sat → Mon</div><div class="pill-areas">Kabulonga · Woodlands · Leopards Hill · Chalala · Chilenje</div></div>
 </div>
-
-<!-- Netlify form detection -->
-<form name="kleankix-bookings" netlify netlify-honeypot="bot-field" hidden>
-  <input name="name"/><input name="phone"/><input name="area"/><input name="pickup_day"/>
-  <input name="delivery_day"/><input name="shoes"/><input name="addons"/>
-  <input name="delivery_type"/><input name="payment"/><input name="address"/>
-  <input name="total"/><input name="notes"/>
-</form>
 
 <div class="form-body" id="formBody">
 
@@ -235,14 +247,11 @@
     <div class="hint"><strong>How:</strong> Open Google Maps → long press your spot → tap Share → Copy link → paste above</div>
   </div>
 
-  <!-- SHOES -->
   <div class="sec-title">Your Shoes</div>
   <label class="lbl">Select shoe types &amp; quantity for each</label>
   <div class="shoe-err" id="shoeErr">Please select at least one shoe type</div>
-
   <div id="shoeList"></div>
 
-  <!-- ADDONS -->
   <div class="sec-title">Add-Ons</div>
   <div class="addon-list">
     <label class="addon-card"><input type="checkbox" name="addon" value="Deep Stain Removal|70" onchange="calcPrice()">
@@ -255,7 +264,6 @@
     </label>
   </div>
 
-  <!-- DELIVERY -->
   <div class="sec-title">Delivery Type</div>
   <div class="field" id="f-delivery">
     <div class="opt-list">
@@ -272,7 +280,6 @@
     <div class="err">Please select delivery type</div>
   </div>
 
-  <!-- PRICE BOX -->
   <div class="price-box" id="priceBox" style="display:none">
     <div class="price-box-title">ESTIMATED TOTAL</div>
     <div class="price-lines" id="priceLines"></div>
@@ -280,7 +287,6 @@
     <div class="express-note" id="expressNote">⚡ Shoe fees doubled + K300 transport for express</div>
   </div>
 
-  <!-- PAYMENT -->
   <div class="sec-title">Payment</div>
   <div class="field" id="f-payment">
     <div class="opt-list">
@@ -304,7 +310,10 @@
     </select>
   </div>
 
-  <button class="submit-btn" type="button" onclick="submitForm()">BOOK MY PICKUP 👟</button>
+  <button class="submit-btn" id="submitBtn" type="button" onclick="submitForm()">
+    <span class="btn-text">BOOK MY PICKUP 👟</span>
+    <div class="btn-spinner"></div>
+  </button>
 </div>
 
 <div class="success" id="successScreen">
@@ -320,6 +329,14 @@
 </div>
 
 <script>
+// ═══════════════════════════════════════════════════════════════════
+// ⚙️  CONFIGURATION — paste your Google Apps Script Web App URL here
+// ═══════════════════════════════════════════════════════════════════
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+// WhatsApp number for notifications
+const WA_NUMBER = '260765121547';
+
 // ── SHOE DATA ────────────────────────────────────────────────────
 const SHOES = [
   { cat:'Men', items:[
@@ -424,8 +441,6 @@ function calcPrice() {
   const delivEl = document.querySelector('input[name="delivery"]:checked');
   const areaVal = document.getElementById('area').value;
   const box = document.getElementById('priceBox');
-
-  // collect selected shoes
   const selectedShoes = [];
   document.querySelectorAll('.shoe-row.active').forEach(row => {
     const key = row.dataset.key;
@@ -434,38 +449,25 @@ function calcPrice() {
     const name = row.querySelector('.shoe-info-name').textContent;
     selectedShoes.push({name, price, qty});
   });
-
   if (selectedShoes.length === 0 || !delivEl || !areaVal) { box.style.display='none'; return; }
-
   const isExpress = delivEl.value === 'express';
   const transport = parseInt(areaVal.split('|')[4]);
   const addons = [...document.querySelectorAll('input[name="addon"]:checked')];
   const addonTotal = addons.reduce((s,a) => s + parseInt(a.value.split('|')[1]), 0);
-
   let shoeTotal = selectedShoes.reduce((s,sh) => s + sh.price * sh.qty, 0);
   if (isExpress) shoeTotal *= 2;
-
   const total = shoeTotal + addonTotal + transport + (isExpress ? 300 : 0);
-
-  // build lines
   const lines = document.getElementById('priceLines');
   lines.innerHTML = '';
-
   selectedShoes.forEach(sh => {
     let amt = sh.price * sh.qty;
     if (isExpress) amt *= 2;
     const label = isExpress ? `${sh.name} ×${sh.qty} (×2)` : `${sh.name} ×${sh.qty}`;
     lines.innerHTML += `<div class="price-row"><span class="plabel">${label}</span><span class="pval">K${amt}</span></div>`;
   });
-
-  if (addonTotal > 0) {
-    lines.innerHTML += `<div class="price-row"><span class="plabel">Add-ons</span><span class="pval">K${addonTotal}</span></div>`;
-  }
+  if (addonTotal > 0) lines.innerHTML += `<div class="price-row"><span class="plabel">Add-ons</span><span class="pval">K${addonTotal}</span></div>`;
   lines.innerHTML += `<div class="price-row"><span class="plabel">Delivery fee</span><span class="pval">K${transport}</span></div>`;
-  if (isExpress) {
-    lines.innerHTML += `<div class="price-row"><span class="plabel">Express surcharge</span><span class="pval">K300</span></div>`;
-  }
-
+  if (isExpress) lines.innerHTML += `<div class="price-row"><span class="plabel">Express surcharge</span><span class="pval">K300</span></div>`;
   document.getElementById('totalAmt').textContent = 'K' + total;
   document.getElementById('expressNote').classList.toggle('show', isExpress);
   box.style.display = 'block';
@@ -479,7 +481,7 @@ function validate(id, cond) {
 }
 
 // ── SUBMIT ───────────────────────────────────────────────────────
-function submitForm() {
+async function submitForm() {
   let ok = true;
   ok = validate('name', document.getElementById('name').value.trim() !== '') && ok;
   ok = validate('phone', document.getElementById('phone').value.trim() !== '') && ok;
@@ -493,7 +495,6 @@ function submitForm() {
     document.getElementById('shoeErr').classList.add('show');
     ok = false;
   }
-
   if (!ok) { document.querySelector('.has-error, .shoe-err.show')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
   const p = document.getElementById('area').value.split('|');
@@ -512,62 +513,84 @@ function submitForm() {
     const qty = parseInt(document.getElementById('qty_' + key).value)||1;
     return s + parseInt(row.dataset.price) * qty;
   }, 0);
+  const totalPairs = selectedShoes.reduce((s, row) => {
+    const key = row.dataset.key;
+    return s + (parseInt(document.getElementById('qty_' + key).value)||1);
+  }, 0);
   let shoeTotal = isExpress ? shoeTotal0 * 2 : shoeTotal0;
 
   const addons = [...document.querySelectorAll('input[name="addon"]:checked')];
   const addonTotal = addons.reduce((s,a) => s + parseInt(a.value.split('|')[1]), 0);
   const total = shoeTotal + addonTotal + transport + (isExpress ? 300 : 0);
 
-  const rows = [
-    ['Name', document.getElementById('name').value],
-    ['Phone', document.getElementById('phone').value],
-    ['Area', p[0]], ['Pickup Day', p[2]], ['Delivery Day', p[3]],
-    ['Shoes', shoeSummary],
-    ['Add-ons', addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None'],
-    ['Delivery', isExpress ? 'Same-Day Express' : 'Standard 48hrs'],
-    ['Payment', document.querySelector('input[name="payment"]:checked').value],
-    ['TOTAL', 'K'+total],
-  ];
-  document.getElementById('summaryCard').innerHTML = rows.map(([l,v])=>`<div class="s-row"><span>${l}</span><span>${v}</span></div>`).join('');
+  const now = new Date();
+  const timestamp = now.toLocaleString('en-GB', {timeZone:'Africa/Lusaka'});
 
-  // ── 1. SEND TO FORMINIT (Google Sheets record) ──────────────────
   const formData = {
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    area: p[0],
-    route: p[1],
-    pickup_day: p[2],
-    delivery_day: p[3],
-    shoes: shoeSummary,
-    addons: addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None',
+    timestamp,
+    name:          document.getElementById('name').value.trim(),
+    phone:         document.getElementById('phone').value.trim(),
+    area:          p[0],
+    route:         p[1],
+    pickup_day:    p[2],
+    delivery_day:  p[3],
+    shoes:         shoeSummary,
+    pairs:         totalPairs,
+    addons:        addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None',
     delivery_type: isExpress ? 'Same-Day Express' : 'Standard 48hrs',
-    payment: document.querySelector('input[name="payment"]:checked').value,
-    address: document.getElementById('address').value,
-    maps_link: document.getElementById('mapslink').value || 'Not provided',
-    notes: document.getElementById('notes').value || 'None',
-    source: document.getElementById('source').value || 'Not specified',
-    total: 'K' + total,
+    delivery_fee:  transport,
+    express_fee:   isExpress ? 300 : 0,
+    total:         total,
+    payment:       document.querySelector('input[name="payment"]:checked').value,
+    address:       document.getElementById('address').value.trim(),
+    maps_link:     document.getElementById('mapslink').value || 'Not provided',
+    notes:         document.getElementById('notes').value || 'None',
+    source:        document.getElementById('source').value || 'Not specified',
+    status:        'Confirmed',
   };
 
-  fetch('https://forminit.com/f/b3j9x62t7ro', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(formData)
-  }).catch(err => console.log('Forminit error:', err));
+  // Show summary card immediately
+  const summaryRows = [
+    ['Name', formData.name],
+    ['Phone', formData.phone],
+    ['Area', formData.area],
+    ['Pickup Day', formData.pickup_day],
+    ['Delivery Day', formData.delivery_day],
+    ['Shoes', formData.shoes],
+    ['Add-ons', formData.addons],
+    ['Delivery', formData.delivery_type],
+    ['Payment', formData.payment],
+    ['TOTAL', 'K' + total],
+  ];
+  document.getElementById('summaryCard').innerHTML = summaryRows.map(([l,v])=>`<div class="s-row"><span>${l}</span><span>${v}</span></div>`).join('');
 
-  // ── 1b. SEND TO NETLIFY FORMS (email notification) ───────────────
-  const netlifyData = new URLSearchParams();
-  netlifyData.append('form-name', 'kleankix-bookings');
-  Object.entries(formData).forEach(([k,v]) => netlifyData.append(k, v));
-  fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: netlifyData.toString()})
-    .catch(err => console.log('Netlify error:', err));
+  // Disable button & show spinner
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  // ── 1. SEND TO GOOGLE SHEETS ─────────────────────────────────────
+  if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Google Apps Script requires no-cors
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+    } catch (err) {
+      console.warn('Google Sheets submission error:', err);
+    }
+  } else {
+    console.warn('Google Sheets URL not configured. See setup banner.');
+  }
 
   // ── 2. WHATSAPP NOTIFICATION ─────────────────────────────────────
   const waMsg = encodeURIComponent(
     `🧹 *NEW KLEAN KIX BOOKING*\n\n` +
     `👤 *Name:* ${formData.name}\n` +
     `📱 *Phone:* ${formData.phone}\n` +
-    `📍 *Area:* ${formData.area}\n` +
+    `📍 *Area:* ${formData.area} (${formData.route})\n` +
     `📦 *Pickup:* ${formData.pickup_day}\n` +
     `🚗 *Delivery:* ${formData.delivery_day}\n` +
     `👟 *Shoes:* ${formData.shoes}\n` +
@@ -575,12 +598,18 @@ function submitForm() {
     `⚡ *Type:* ${formData.delivery_type}\n` +
     `💳 *Payment:* ${formData.payment}\n` +
     `🏠 *Address:* ${formData.address}\n` +
-    `💰 *TOTAL: K${total}*`
+    `🗺️ *Maps:* ${formData.maps_link}\n` +
+    `📝 *Notes:* ${formData.notes}\n` +
+    `💰 *TOTAL: K${total}*\n\n` +
+    `🕐 ${timestamp}`
   );
-  setTimeout(() => {
-    window.open(`https://wa.me/260765121547?text=${waMsg}`, '_blank');
-  }, 800);
 
+  setTimeout(() => {
+    window.open(`https://wa.me/${WA_NUMBER}?text=${waMsg}`, '_blank');
+  }, 600);
+
+  // Show success screen
+  btn.classList.remove('loading');
   document.getElementById('formBody').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
   window.scrollTo({top:0,behavior:'smooth'});

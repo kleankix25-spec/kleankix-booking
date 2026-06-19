@@ -570,7 +570,7 @@ async function submitForm() {
   btn.classList.add('loading');
 
   // ── 1. SEND TO GOOGLE SHEETS ─────────────────────────────────────
-  if (GOOGLE_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec') {
+  if (GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec') {
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',

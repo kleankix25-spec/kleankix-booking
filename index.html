@@ -161,7 +161,7 @@
   2. Click <strong>Extensions → Apps Script</strong><br>
   3. Paste the Apps Script code (see README), click <strong>Deploy → New deployment → Web App</strong><br>
   4. Set access to <em>"Anyone"</em>, copy the Web App URL<br>
-  5. In this file, replace <code>YOUR_GOOGLE_SCRIPT_URL_HERE</code> with your URL<br>
+  5. In this file, replace <code>https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec</code> with your URL<br>
   6. Delete this banner once done ✅
 </div>
 
@@ -332,7 +332,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // ⚙️  CONFIGURATION — paste your Google Apps Script Web App URL here
 // ═══════════════════════════════════════════════════════════════════
-const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec';
 
 // WhatsApp number for notifications
 const WA_NUMBER = '260765121547';
@@ -570,7 +570,7 @@ async function submitForm() {
   btn.classList.add('loading');
 
   // ── 1. SEND TO GOOGLE SHEETS ─────────────────────────────────────
-  if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+  if (GOOGLE_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec') {
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',

@@ -215,9 +215,9 @@
   </div>
 
   <div class="day-box" id="dayBox">
-    <div class="day-row"><span class="dlabel">📦 Pickup Day</span><span class="dval orange" id="dPickup"></span></div>
-    <div class="day-row"><span class="dlabel">🚗 Delivery Day</span><span class="dval" id="dDelivery"></span></div>
-    <div class="day-row"><span class="dlabel">🚚 Delivery Fee</span><span class="dval" id="dFee"></span></div>
+    <div class="day-row"><span class="dlabel">Pickup Day</span><span class="dval orange" id="dPickup"></span></div>
+    <div class="day-row"><span class="dlabel">Delivery Day</span><span class="dval" id="dDelivery"></span></div>
+    <div class="day-row"><span class="dlabel">Delivery Fee</span><span class="dval" id="dFee"></span></div>
   </div>
 
   <div class="field" id="f-address">
@@ -268,7 +268,7 @@
     <div class="price-box-title">ESTIMATED TOTAL</div>
     <div class="price-lines" id="priceLines"></div>
     <div class="price-total"><span class="tlabel">TOTAL</span><span class="tval" id="totalAmt">K0</span></div>
-    <div class="express-note" id="expressNote">⚡ Shoe fees doubled + K300 transport for express</div>
+    <div class="express-note" id="expressNote">Shoe fees doubled + K300 transport for express</div>
   </div>
 
   <div class="sec-title">Payment</div>
@@ -295,13 +295,13 @@
   </div>
 
   <button class="submit-btn" id="submitBtn" type="button" onclick="submitForm()">
-    <span class="btn-text">BOOK MY PICKUP 👟</span>
+    <span class="btn-text">BOOK MY PICKUP</span>
     <div class="btn-spinner"></div>
   </button>
 </div>
 
 <div class="success" id="successScreen">
-  <div class="success-icon">👟✨</div>
+  <div class="success-icon">✓</div>
   <div class="success-title">You're Booked!</div>
   <p class="success-msg">We'll confirm your pickup via WhatsApp within 2 hours. Get your kicks ready!</p>
   <div class="summary-card" id="summaryCard"></div>
@@ -313,7 +313,7 @@
 </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqV0lmUHzp0wwmXn9qJcd-3s3MyBRSIDQzjvKXJUgfl1msbjNYyRQD3T6jNXHyyKU/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpjTlU2eQTvotKlDeomdU7OHppVSX8DNnZ8r3DBIAro_SWJY7Mu4q7q74CZG5rhkok/exec';
 const WA_NUMBER = '260765121547';
 
 const SHOES = [
@@ -539,6 +539,31 @@ async function submitForm() {
   btn.disabled = true;
   btn.classList.add('loading');
 
+  // Build WhatsApp message and link BEFORE the network call,
+  // so the popup opens as part of the same click/tap gesture
+  // (mobile browsers block window.open() calls made after an
+  // awaited fetch or a setTimeout, since they no longer count
+  // as a direct response to the user's tap).
+  const waMsg = encodeURIComponent(
+    `NEW KLEAN KIX BOOKING\n\n` +
+    `Name: ${formData.name}\n` +
+    `Phone: ${formData.whatsapp}\n` +
+    `Area: ${formData.area} (${formData.route})\n` +
+    `Pickup: ${formData.pickupDay}\n` +
+    `Delivery: ${formData.deliveryDay}\n` +
+    `Shoes: ${formData.shoes}\n` +
+    `Add-ons: ${formData.addons}\n` +
+    `Type: ${formData.deliveryType}\n` +
+    `Payment: ${formData.payment}\n` +
+    `Address: ${formData.address}\n` +
+    `Maps: ${formData.maps_link}\n` +
+    `Notes: ${formData.instructions}\n` +
+    `TOTAL: K${total}\n\n` +
+    `${timestamp}`
+  );
+  const waUrl = `https://wa.me/${WA_NUMBER}?text=${waMsg}`;
+  const waWindow = window.open(waUrl, '_blank');
+
   // Send to Google Sheets
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
@@ -551,28 +576,11 @@ async function submitForm() {
     console.warn('Google Sheets submission error:', err);
   }
 
-  // WhatsApp notification
-  const waMsg = encodeURIComponent(
-    `🧹 *NEW KLEAN KIX BOOKING*\n\n` +
-    `👤 *Name:* ${formData.name}\n` +
-    `📱 *Phone:* ${formData.whatsapp}\n` +
-    `📍 *Area:* ${formData.area} (${formData.route})\n` +
-    `📦 *Pickup:* ${formData.pickupDay}\n` +
-    `🚗 *Delivery:* ${formData.deliveryDay}\n` +
-    `👟 *Shoes:* ${formData.shoes}\n` +
-    `➕ *Add-ons:* ${formData.addons}\n` +
-    `⚡ *Type:* ${formData.deliveryType}\n` +
-    `💳 *Payment:* ${formData.payment}\n` +
-    `🏠 *Address:* ${formData.address}\n` +
-    `🗺️ *Maps:* ${formData.maps_link}\n` +
-    `📝 *Notes:* ${formData.instructions}\n` +
-    `💰 *TOTAL: K${total}*\n\n` +
-    `🕐 ${timestamp}`
-  );
-
-  setTimeout(() => {
-    window.open(`https://wa.me/${WA_NUMBER}?text=${waMsg}`, '_blank');
-  }, 600);
+  // Fallback: if the popup was blocked (waWindow is null/undefined
+  // on some mobile browsers), redirect in the same tab instead
+  if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
+    window.location.href = waUrl;
+  }
 
   btn.classList.remove('loading');
   document.getElementById('formBody').style.display = 'none';

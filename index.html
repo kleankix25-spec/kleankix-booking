@@ -129,14 +129,8 @@
   .s-row span:first-child { color:#777; }
   .s-row span:last-child { font-weight:600; text-align:right; max-width:65%; }
 
-  /* ── GOOGLE SHEETS BADGE ── */
   .sheets-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(52,168,83,0.12); border:1px solid rgba(52,168,83,0.3); border-radius:20px; padding:5px 12px; font-size:11px; color:#34a853; font-weight:600; letter-spacing:0.5px; margin-top:12px; }
   .sheets-badge svg { width:14px; height:14px; flex-shrink:0; }
-
-  /* ── SETUP BANNER ── */
-  .setup-banner { background:#141414; border:1px dashed rgba(255,92,26,0.4); border-radius:12px; padding:14px 16px; margin:16px 20px 0; font-size:12px; color:#888; line-height:1.7; }
-  .setup-banner strong { color:var(--orange); display:block; margin-bottom:4px; font-size:13px; }
-  .setup-banner code { background:#2a2a2a; padding:2px 6px; border-radius:4px; font-size:11px; color:#ccc; word-break:break-all; }
 
   .footer { text-align:center; padding:16px 24px 36px; font-size:11px; color:#333; line-height:1.7; }
 </style>
@@ -153,7 +147,6 @@
     Bookings saved to Google Sheets
   </div>
 </div>
-
 
 <div class="schedule">
   <div class="pill"><div class="pill-day">Tue → Thu</div><div class="pill-areas">Makeni · Chilanga · Lilayi</div></div>
@@ -182,38 +175,39 @@
     <select id="area" onchange="onAreaChange()">
       <option value="">— Choose your area —</option>
       <optgroup label="Route 1 — Pickup Tuesday · Delivery Thursday">
-        <option value="Makeni|Route 1|Tuesday|Thursday|200">Makeni</option>
+        <option value="Makeni|Route 1|Tuesday|Thursday|100">Makeni</option>
         <option value="Chilanga|Route 1|Tuesday|Thursday|200">Chilanga</option>
         <option value="Lilayi|Route 1|Tuesday|Thursday|200">Lilayi</option>
       </optgroup>
       <optgroup label="Route 2 — Pickup Wednesday · Delivery Friday">
-        <option value="Town/CBD|Route 2|Wednesday|Friday|200">Town / CBD</option>
-        <option value="Lusaka West|Route 2|Wednesday|Friday|200">Lusaka West</option>
-        <option value="Villa Elizabetha|Route 2|Wednesday|Friday|200">Villa Elizabetha</option>
-        <option value="Northmead|Route 2|Wednesday|Friday|200">Northmead</option>
-        <option value="Thornpark|Route 2|Wednesday|Friday|200">Thornpark</option>
-        <option value="Roma|Route 2|Wednesday|Friday|200">Roma</option>
-        <option value="Olympia|Route 2|Wednesday|Friday|200">Olympia</option>
-        <option value="Jesmondine|Route 2|Wednesday|Friday|200">Jesmondine</option>
+        <option value="Town/CBD|Route 2|Wednesday|Friday|100">Town / CBD</option>
+        <option value="Lusaka West|Route 2|Wednesday|Friday|100">Lusaka West</option>
+        <option value="Villa Elizabetha|Route 2|Wednesday|Friday|100">Villa Elizabetha</option>
+        <option value="Northmead|Route 2|Wednesday|Friday|100">Northmead</option>
+        <option value="Thornpark|Route 2|Wednesday|Friday|100">Thornpark</option>
+        <option value="Roma|Route 2|Wednesday|Friday|100">Roma</option>
+        <option value="Olympia|Route 2|Wednesday|Friday|100">Olympia</option>
+        <option value="Jesmondine|Route 2|Wednesday|Friday|100">Jesmondine</option>
       </optgroup>
       <optgroup label="Route 3 — Pickup Saturday · Delivery Monday">
-        <option value="Munali|Route 3|Saturday|Monday|200">Munali</option>
-        <option value="Meanwood Mtumbi|Route 3|Saturday|Monday|200">Meanwood Mtumbi</option>
-        <option value="Meanwood Ndeke|Route 3|Saturday|Monday|200">Meanwood Ndeke</option>
-        <option value="Meanwood Airport|Route 3|Saturday|Monday|200">Meanwood Airport</option>
-        <option value="Chelston|Route 3|Saturday|Monday|200">Chelston</option>
-        <option value="Avondale|Route 3|Saturday|Monday|200">Avondale</option>
-        <option value="Salama Park|Route 3|Saturday|Monday|200">Salama Park</option>
+        <option value="Munali|Route 3|Saturday|Monday|100">Munali</option>
+        <option value="Meanwood Mtumbi|Route 3|Saturday|Monday|100">Meanwood Mtumbi</option>
+        <option value="Meanwood Ndeke|Route 3|Saturday|Monday|100">Meanwood Ndeke</option>
+        <option value="Meanwood Airport|Route 3|Saturday|Monday|100">Meanwood Airport</option>
+        <option value="Chelston|Route 3|Saturday|Monday|100">Chelston</option>
+        <option value="Avondale|Route 3|Saturday|Monday|100">Avondale</option>
+        <option value="Salama Park|Route 3|Saturday|Monday|100">Salama Park</option>
         <option value="Vorna Valley|Route 3|Saturday|Monday|200">Vorna Valley</option>
       </optgroup>
       <optgroup label="Route 4 — Pickup Saturday · Delivery Monday">
         <option value="Kabulonga|Route 4|Saturday|Monday|100">Kabulonga</option>
         <option value="Woodlands|Route 4|Saturday|Monday|100">Woodlands</option>
         <option value="Leopards Hill Rd|Route 4|Saturday|Monday|100">Leopards Hill Road</option>
-        <option value="New Kasama|Route 4|Saturday|Monday|100">New Kasama</option>
-        <option value="Chifwema|Route 4|Saturday|Monday|100">Chifwema</option>
+        <option value="New Kasama|Route 4|Saturday|Monday|200">New Kasama</option>
+        <option value="Chifwema|Route 4|Saturday|Monday|200">Chifwema</option>
         <option value="State Lodge Area|Route 4|Saturday|Monday|100">State Lodge Area</option>
         <option value="Chalala|Route 4|Saturday|Monday|100">Chalala</option>
+        <option value="Ibex Hill|Route 4|Saturday|Monday|100">Ibex Hill</option>
         <option value="Chilenje|Route 4|Saturday|Monday|100">Chilenje</option>
       </optgroup>
     </select>
@@ -319,15 +313,9 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════
-// ⚙️  CONFIGURATION — paste your Google Apps Script Web App URL here
-// ═══════════════════════════════════════════════════════════════════
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbwN_bIL5uVV59o1JNUgGEEuzN56E4b8c1_0eYubBO1rUhFYT40o-uxW6jheZ77VTrm6/exec/exec/exec';
-
-// WhatsApp number for notifications
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby2I6ishZNI4Zwj-zDvySf85-W8N84JRk6bRJiLYwkvXJ3rmvuvZ1SwXPcbKfHicsJIZg/exec';
 const WA_NUMBER = '260765121547';
 
-// ── SHOE DATA ────────────────────────────────────────────────────
 const SHOES = [
   { cat:'Men', items:[
     {name:'Sneakers', price:60},
@@ -357,7 +345,6 @@ const SHOES = [
   ]},
 ];
 
-// ── BUILD SHOE LIST ──────────────────────────────────────────────
 function buildShoeList() {
   const container = document.getElementById('shoeList');
   SHOES.forEach(section => {
@@ -413,7 +400,6 @@ function updateSubtotal(key, price) {
   calcPrice();
 }
 
-// ── AREA CHANGE ──────────────────────────────────────────────────
 function onAreaChange() {
   const v = document.getElementById('area').value;
   const box = document.getElementById('dayBox');
@@ -426,7 +412,6 @@ function onAreaChange() {
   calcPrice();
 }
 
-// ── PRICE CALC ───────────────────────────────────────────────────
 function calcPrice() {
   const delivEl = document.querySelector('input[name="delivery"]:checked');
   const areaVal = document.getElementById('area').value;
@@ -463,14 +448,12 @@ function calcPrice() {
   box.style.display = 'block';
 }
 
-// ── VALIDATE ─────────────────────────────────────────────────────
 function validate(id, cond) {
   const el = document.getElementById('f-'+id);
   if (el) el.classList.toggle('has-error', !cond);
   return cond;
 }
 
-// ── SUBMIT ───────────────────────────────────────────────────────
 async function submitForm() {
   let ok = true;
   ok = validate('name', document.getElementById('name').value.trim() !== '') && ok;
@@ -519,77 +502,70 @@ async function submitForm() {
   const formData = {
     timestamp,
     name:          document.getElementById('name').value.trim(),
-    phone:         document.getElementById('phone').value.trim(),
+    whatsapp:      document.getElementById('phone').value.trim(),
     area:          p[0],
     route:         p[1],
-    pickup_day:    p[2],
-    delivery_day:  p[3],
+    pickupDay:     p[2],
+    deliveryDay:   p[3],
     shoes:         shoeSummary,
     pairs:         totalPairs,
     addons:        addons.length ? addons.map(a=>a.value.split('|')[0]).join(', ') : 'None',
-    delivery_type: isExpress ? 'Same-Day Express' : 'Standard 48hrs',
+    deliveryType:  isExpress ? 'Same-Day Express' : 'Standard 48hrs',
     delivery_fee:  transport,
     express_fee:   isExpress ? 300 : 0,
     total:         total,
     payment:       document.querySelector('input[name="payment"]:checked').value,
     address:       document.getElementById('address').value.trim(),
     maps_link:     document.getElementById('mapslink').value || 'Not provided',
-    notes:         document.getElementById('notes').value || 'None',
-    source:        document.getElementById('source').value || 'Not specified',
-    status:        'Confirmed',
+    instructions:  document.getElementById('notes').value || 'None',
+    referral:      document.getElementById('source').value || 'Not specified',
   };
 
-  // Show summary card immediately
   const summaryRows = [
     ['Name', formData.name],
-    ['Phone', formData.phone],
+    ['Phone', formData.whatsapp],
     ['Area', formData.area],
-    ['Pickup Day', formData.pickup_day],
-    ['Delivery Day', formData.delivery_day],
+    ['Pickup Day', formData.pickupDay],
+    ['Delivery Day', formData.deliveryDay],
     ['Shoes', formData.shoes],
     ['Add-ons', formData.addons],
-    ['Delivery', formData.delivery_type],
+    ['Delivery', formData.deliveryType],
     ['Payment', formData.payment],
     ['TOTAL', 'K' + total],
   ];
   document.getElementById('summaryCard').innerHTML = summaryRows.map(([l,v])=>`<div class="s-row"><span>${l}</span><span>${v}</span></div>`).join('');
 
-  // Disable button & show spinner
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.classList.add('loading');
 
-  // ── 1. SEND TO GOOGLE SHEETS ─────────────────────────────────────
-  if (GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzVY5c-YMVVoNyrT-_gPlm-YI_TiLZ4IUTsWs1fJzhrqXHooKFQ0Yq4rrOTwpyaHI1nUw/exec') {
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Google Apps Script requires no-cors
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-    } catch (err) {
-      console.warn('Google Sheets submission error:', err);
-    }
-  } else {
-    console.warn('Google Sheets URL not configured. See setup banner.');
+  // Send to Google Sheets
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+  } catch (err) {
+    console.warn('Google Sheets submission error:', err);
   }
 
-  // ── 2. WHATSAPP NOTIFICATION ─────────────────────────────────────
+  // WhatsApp notification
   const waMsg = encodeURIComponent(
     `🧹 *NEW KLEAN KIX BOOKING*\n\n` +
     `👤 *Name:* ${formData.name}\n` +
-    `📱 *Phone:* ${formData.phone}\n` +
+    `📱 *Phone:* ${formData.whatsapp}\n` +
     `📍 *Area:* ${formData.area} (${formData.route})\n` +
-    `📦 *Pickup:* ${formData.pickup_day}\n` +
-    `🚗 *Delivery:* ${formData.delivery_day}\n` +
+    `📦 *Pickup:* ${formData.pickupDay}\n` +
+    `🚗 *Delivery:* ${formData.deliveryDay}\n` +
     `👟 *Shoes:* ${formData.shoes}\n` +
     `➕ *Add-ons:* ${formData.addons}\n` +
-    `⚡ *Type:* ${formData.delivery_type}\n` +
+    `⚡ *Type:* ${formData.deliveryType}\n` +
     `💳 *Payment:* ${formData.payment}\n` +
     `🏠 *Address:* ${formData.address}\n` +
     `🗺️ *Maps:* ${formData.maps_link}\n` +
-    `📝 *Notes:* ${formData.notes}\n` +
+    `📝 *Notes:* ${formData.instructions}\n` +
     `💰 *TOTAL: K${total}*\n\n` +
     `🕐 ${timestamp}`
   );
@@ -598,14 +574,12 @@ async function submitForm() {
     window.open(`https://wa.me/${WA_NUMBER}?text=${waMsg}`, '_blank');
   }, 600);
 
-  // Show success screen
   btn.classList.remove('loading');
   document.getElementById('formBody').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── INIT ─────────────────────────────────────────────────────────
 buildShoeList();
 </script>
 </body>

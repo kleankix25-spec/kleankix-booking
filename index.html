@@ -303,7 +303,10 @@
 <div class="success" id="successScreen">
   <div class="success-icon">✓</div>
   <div class="success-title">You're Booked!</div>
-  <p class="success-msg">We'll confirm your pickup via WhatsApp within 2 hours. Get your kicks ready!</p>
+  <p class="success-msg">Tap below to send your booking details on WhatsApp so we can confirm your pickup.</p>
+  <a href="#" id="waLink" target="_blank" rel="noopener" class="submit-btn" style="display:inline-block;text-decoration:none;max-width:360px;width:calc(100% - 40px);margin:0 0 24px;">
+    <span class="btn-text">SEND ON WHATSAPP</span>
+  </a>
   <div class="summary-card" id="summaryCard"></div>
 </div>
 
@@ -539,11 +542,9 @@ async function submitForm() {
   btn.disabled = true;
   btn.classList.add('loading');
 
-  // Build WhatsApp message and link BEFORE the network call,
-  // so the popup opens as part of the same click/tap gesture
-  // (mobile browsers block window.open() calls made after an
-  // awaited fetch or a setTimeout, since they no longer count
-  // as a direct response to the user's tap).
+  // Build the WhatsApp message and link. We no longer try to auto-open
+  // WhatsApp here — instead we set it as the href of a visible button
+  // on the success screen, which the customer taps themselves.
   const waMsg = encodeURIComponent(
     `NEW KLEAN KIX BOOKING\n\n` +
     `Name: ${formData.name}\n` +
@@ -562,9 +563,9 @@ async function submitForm() {
     `${timestamp}`
   );
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${waMsg}`;
-  const waWindow = window.open(waUrl, '_blank');
 
-  // Send to Google Sheets
+  // Send to Google Sheets (fire-and-forget is fine here since
+  // mode:'no-cors' never lets us read the response anyway)
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
@@ -576,11 +577,14 @@ async function submitForm() {
     console.warn('Google Sheets submission error:', err);
   }
 
-  // Fallback: if the popup was blocked (waWindow is null/undefined
-  // on some mobile browsers), redirect in the same tab instead
-  if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
-    window.location.href = waUrl;
-  }
+  // Point the WhatsApp button at the prefilled chat link. We deliberately
+  // use a real, visible <a> tap target instead of an automatic redirect
+  // or window.open(): mobile browsers and in-app webviews (Facebook,
+  // Instagram, TikTok) routinely block popups and silent navigations,
+  // even ones triggered synchronously from a tap. A direct link the
+  // customer taps themselves is the only approach that works reliably
+  // across iOS Safari, Android Chrome, and in-app browsers.
+  document.getElementById('waLink').href = waUrl;
 
   btn.classList.remove('loading');
   document.getElementById('formBody').style.display = 'none';
